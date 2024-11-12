@@ -1,26 +1,33 @@
-// Retrieve stored preference and update UI
-chrome.storage.sync.get("hideShorts", (data) => {
+document.addEventListener("DOMContentLoaded", () => {
+  const toggleButton = document.getElementById("toggle-shorts-btn");
   const message = document.getElementById("message");
-  message.innerText = data.hideShorts
-    ? "Shorts are currently hidden."
-    : "Shorts are currently visible.";
-});
 
-// Toggle button to enable or disable hiding Shorts
-document.getElementById("toggle-shorts-btn").addEventListener("click", () => {
   chrome.storage.sync.get("hideShorts", (data) => {
-    const newState = !data.hideShorts;
+    const isHidden = data.hideShorts || false;
+    message.innerText = isHidden
+      ? "Shorts are currently hidden."
+      : "Shorts are currently visible.";
+    toggleButton.textContent = isHidden ? "Unhide Shorts" : "Hide Shorts";
+  });
 
-    // Save new state
-    chrome.storage.sync.set({ hideShorts: newState }, () => {
-      // Update message
-      const message = document.getElementById("message");
-      message.innerText = newState
-        ? "Shorts are now hidden."
-        : "Shorts are now visible.";
+  toggleButton.addEventListener("click", () => {
+    chrome.storage.sync.get("hideShorts", (data) => {
+      const newState = !data.hideShorts;
 
-      // Send message to content script to update Shorts visibility immediately
-      chrome.runtime.sendMessage({ action: "updateShortsVisibility" });
+      chrome.storage.sync.set({ hideShorts: newState }, () => {
+        message.innerText = newState
+          ? "Shorts are now hidden."
+          : "Shorts are now visible.";
+        toggleButton.textContent = newState ? "Unhide Shorts" : "Hide Shorts";
+
+        chrome.runtime.sendMessage({ action: "updateShortsVisibility" });
+
+        chrome.tabs.query({ url: "*://www.youtube.com/*" }, (tabs) => {
+          tabs.forEach((tab) => {
+            chrome.tabs.reload(tab.id);
+          });
+        });
+      });
     });
   });
 });
