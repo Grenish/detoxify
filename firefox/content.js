@@ -1,54 +1,43 @@
-function hideYouTubeShorts() {
-  // Hide Shorts on the Home page
+// Polyfill for Firefox compatibility
+if (typeof browser !== "undefined") {
+  chrome = browser;
+}
+
+function hideHomePageShorts(hidden) {
   const shortsSections = document.querySelectorAll("ytd-rich-section-renderer");
   shortsSections.forEach((section) => {
     const titleElement = section.querySelector("#title-text");
     if (titleElement && titleElement.innerText.trim() === "Shorts") {
-      section.style.display = "none"; // Hide the section completely
-    }
-  });
-
-  // Hide Shorts in Search Results
-  const searchShortsSections = document.querySelectorAll(
-    "ytd-item-section-renderer"
-  );
-  searchShortsSections.forEach((section) => {
-    const titleElement = section.querySelector("#title");
-    if (titleElement && titleElement.innerText.trim() === "Shorts") {
-      section.style.display = "none"; // Hide the section completely
+      section.style.display = hidden ? "none" : ""; // Set display based on hidden state
+      console.log(`Shorts visibility set to ${hidden ? "hidden" : "visible"}`);
     }
   });
 }
 
-function observeShorts() {
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.addedNodes.length || mutation.removedNodes.length) {
-        try {
-          hideYouTubeShorts();
-        } catch (error) {
-          console.error("Error hiding YouTube Shorts:", error);
-        }
-      }
+// Initialize visibility based on storage
+function initializeShortsVisibility() {
+  chrome.storage.sync.get({ hideShorts: false }, (data) => {
+    const isHidden =
+      data && data.hideShorts !== undefined ? data.hideShorts : false;
+    hideHomePageShorts(isHidden);
+    console.log("Initial Shorts visibility:", isHidden);
+  });
+}
+
+// Listen for visibility toggle messages
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "updateShortsVisibility") {
+    chrome.storage.sync.get({ hideShorts: false }, (data) => {
+      const isHidden =
+        data && data.hideShorts !== undefined ? data.hideShorts : false;
+      hideHomePageShorts(isHidden);
+      console.log("Updated Shorts visibility:", isHidden);
     });
-  });
-
-  observer.observe(document.body, { childList: true, subtree: true });
-}
+  }
+});
 
 try {
-  hideYouTubeShorts();
-  observeShorts();
+  initializeShortsVisibility(); // Set initial state on load
 } catch (error) {
   console.error("Error initializing Shorts hiding:", error);
 }
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "toggleShortsVisibility") {
-    try {
-      hideYouTubeShorts();
-    } catch (error) {
-      console.error("Error toggling Shorts visibility:", error);
-    }
-  }
-});

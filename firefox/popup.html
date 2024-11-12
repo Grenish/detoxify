@@ -2,51 +2,124 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>YouTube Shorts Hider</title>
+    <title>Detoxify YouTube</title>
     <style>
+      /* Overall layout and font */
       body {
         font-family: Arial, sans-serif;
-        padding: 15px;
-        width: 250px;
+        padding: 20px;
+        width: 260px;
+        background-color: #f9f9f9;
+        color: #333;
       }
+
+      /* Title styling */
       h1 {
-        font-size: 18px;
+        font-size: 20px;
         margin-bottom: 15px;
         text-align: center;
-        color: #ff0000;
+        color: #ff5722;
       }
-      .option {
-        margin-bottom: 15px;
-      }
+
+      /* Button styling */
       .toggle-button {
         width: 100%;
-        padding: 10px;
-        background-color: #ff0000;
+        padding: 12px;
+        background-color: #ff5722;
         color: #ffffff;
         border: none;
-        font-size: 14px;
+        font-size: 16px;
+        font-weight: bold;
         cursor: pointer;
         border-radius: 4px;
+        transition: background-color 0.3s ease;
       }
+
       .toggle-button:hover {
-        background-color: #cc0000;
+        background-color: #e64a19;
       }
+
+      /* Message styling */
       .message {
-        font-size: 12px;
-        color: #00aa00;
+        font-size: 13px;
+        color: #4caf50;
         text-align: center;
         margin-top: 10px;
+      }
+
+      /* Notice text styling */
+      .notice {
+        font-size: 12px;
+        color: #777;
+        text-align: center;
+        margin-top: 15px;
+      }
+
+      /* Link and support styling */
+      .link-container,
+      .support-container {
+        text-align: center;
+        font-size: 13px;
+        margin-top: 20px;
+        color: #888;
+      }
+
+      .link-container a,
+      .support-container a {
+        color: #ff5722;
+        text-decoration: none;
+      }
+
+      .link-container a:hover,
+      .support-container a:hover {
+        text-decoration: underline;
+      }
+
+      /* Support links in a row */
+      .support-links {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 5px;
       }
     </style>
   </head>
   <body>
     <h1>Detoxify YouTube</h1>
+
     <div class="option">
       <button class="toggle-button" id="toggle-shorts-btn">
         Toggle Hide Shorts
       </button>
     </div>
+
     <div class="message" id="message"></div>
+
+    <p class="notice">
+      Message and auto-reload may not work properly in Firefox. Please reload
+      the tab after clicking the button.
+    </p>
+
+    <div class="link-container">
+      <p>
+        Found a bug? Please
+        <a
+          href="https://github.com/Grenish/detoxify/issues/new/choose"
+          target="_blank"
+          >report it here</a
+        >
+      </p>
+    </div>
+
+    <div class="support-container">
+      <p>Support my work:</p>
+      <div class="support-links">
+        <a href="https://buymeacoffee.com/grenish" target="_blank"
+          >Buy Me a Coffee</a
+        >
+        <a href="https://grenishrai.icu" target="_blank">My Website</a>
+      </div>
+    </div>
+
     <script src="popup.js"></script>
   </body>
 </html>

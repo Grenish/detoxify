@@ -7,6 +7,12 @@
   "browser_action": {
     "default_popup": "popup.html"
   },
+  "icons": {
+    "16": "detoxify.png",
+    "32": "detoxify.png",
+    "48": "detoxify.png",
+    "128": "detoxify.png"
+  },
   "content_scripts": [
     {
       "matches": ["*://www.youtube.com/*"],
@@ -15,6 +21,6 @@
   ],
   "background": {
     "scripts": ["background-script.js"],
-    "persistent": true
+    "persistent": false
   }
 }
