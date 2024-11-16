@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Detoxify",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Customize your YouTube feed by hiding Shorts and filtering content.",
   "permissions": ["storage", "tabs"],
   "browser_action": {
@@ -22,5 +22,11 @@
   "background": {
     "scripts": ["background-script.js"],
     "persistent": false
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{5bd4b0f1-6eb4-4a34-a44e-2b79c9df7e2e}",
+      "strict_min_version": "91.0"
+    }
   }
 }

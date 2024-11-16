@@ -3,24 +3,35 @@ function hideHomePageShorts(hidden) {
   shortsSections.forEach((section) => {
     const titleElement = section.querySelector("#title-text");
     if (titleElement && titleElement.innerText.trim() === "Shorts") {
-      section.style.display = hidden ? "none" : ""; // Set display based on hidden state
+      section.style.display = hidden ? "none" : "";
     }
+  });
+}
+
+function hideSearchPageShorts(hidden) {
+  const searchShortsElements = document.querySelectorAll(
+    "ytd-reel-shelf-renderer"
+  );
+  searchShortsElements.forEach((element) => {
+    element.style.display = hidden ? "none" : "";
   });
 }
 
 function initializeShortsVisibility() {
   chrome.storage.sync.get("hideShorts", (data) => {
-    hideHomePageShorts(data.hideShorts || false);
+    const hidden = data.hideShorts || false;
+    hideHomePageShorts(hidden);
+    hideSearchPageShorts(hidden);
   });
 }
 
-let throttleTimeout;
-function throttledHideHomePageShorts(observer) {
+function throttledHideShorts(observer, hideFunction) {
+  let throttleTimeout;
   if (!throttleTimeout) {
     throttleTimeout = setTimeout(() => {
       observer.disconnect();
       chrome.storage.sync.get("hideShorts", (data) => {
-        hideHomePageShorts(data.hideShorts || false);
+        hideFunction(data.hideShorts || false);
       });
       observer.observe(document.body, { childList: true, subtree: true });
       throttleTimeout = null;
@@ -41,7 +52,27 @@ function observeHomePageShorts() {
     });
 
     if (relevantChange) {
-      throttledHideHomePageShorts(observer);
+      throttledHideShorts(observer, hideHomePageShorts);
+    }
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+}
+
+function observeSearchPageShorts() {
+  const observer = new MutationObserver((mutations) => {
+    let relevantChange = false;
+
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType === 1 && node.matches("ytd-reel-shelf-renderer")) {
+          relevantChange = true;
+        }
+      });
+    });
+
+    if (relevantChange) {
+      throttledHideShorts(observer, hideSearchPageShorts);
     }
   });
 
@@ -51,14 +82,17 @@ function observeHomePageShorts() {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "updateShortsVisibility") {
     chrome.storage.sync.get("hideShorts", (data) => {
-      hideHomePageShorts(data.hideShorts || false);
+      const hidden = data.hideShorts || false;
+      hideHomePageShorts(hidden);
+      hideSearchPageShorts(hidden);
     });
   }
 });
 
 try {
-  initializeShortsVisibility(); // Set initial state on load
+  initializeShortsVisibility();
   observeHomePageShorts();
+  observeSearchPageShorts();
 } catch (error) {
   console.error("Error initializing Shorts hiding:", error);
 }
