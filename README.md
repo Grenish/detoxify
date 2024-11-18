@@ -1,9 +1,16 @@
 # Detoxify
 
-Detoxify is a browser extension designed to give you control over your YouTube experience by hiding YouTube Shorts from your home feed, offering a distraction-free, streamlined interface. Currently compatible with Firefox and soon to be available for Chrome and other Chromium-based browsers.
+<br clear="both">
 
-![detoxify chrome](https://github.com/user-attachments/assets/10b4f4a7-e848-487b-8772-0c8bc4927c33)
-![detoxify firefox](https://github.com/user-attachments/assets/d75ec890-0cae-4bbd-9752-d579c393a721)
+<img align="left" height="250" src="https://github.com/user-attachments/assets/d75ec890-0cae-4bbd-9752-d579c393a721"  />
+
+###
+
+<p align="left">Detoxify is a browser extension designed to give you control over your YouTube experience by hiding YouTube Shorts from your home feed, offering a distraction-free, streamlined interface. Currently compatible with Firefox and soon to be available for Chrome and other Chromium-based browsers.</p>
+
+###
+
+<br clear="both">
 
 
 ## Features
@@ -33,11 +40,9 @@ Detoxify will soon be available for Chrome and other Chromium-based browsers. St
 
 ## Screenshots
 
-### Extension on FireFox
-![Detoxify Extension for Firefox](https://github.com/user-attachments/assets/cde013b3-56ed-4b0e-b372-aebb01afb063)
-
-### Extension on Chrome (Unreleased)
-![Detoxify Extension for Chrome](https://github.com/user-attachments/assets/f4b53347-7fc0-4b1b-9350-214793f8ffb7)
+| Extension on Firefox | Extension on Chrome (Unreleased) |
+|-----------------------|----------------------------------|
+| ![Detoxify Extension for Firefox](https://github.com/user-attachments/assets/cde013b3-56ed-4b0e-b372-aebb01afb063) | ![Detoxify Extension for Chrome](https://github.com/user-attachments/assets/f4b53347-7fc0-4b1b-9350-214793f8ffb7) |
 
 ### Before Using Detoxify
 
