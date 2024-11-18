@@ -3,7 +3,7 @@ function hideHomePageShorts(hidden) {
   shortsSections.forEach((section) => {
     const titleElement = section.querySelector("#title-text");
     if (titleElement && titleElement.innerText.trim() === "Shorts") {
-      section.style.display = hidden ? "none" : "";
+      section.style.display = hidden ? "none !important" : "";
     }
   });
 }
@@ -13,7 +13,7 @@ function hideSearchPageShorts(hidden) {
     "ytd-reel-shelf-renderer"
   );
   searchShortsElements.forEach((element) => {
-    element.style.display = hidden ? "none" : "";
+    element.style.display = hidden ? "none !important" : "";
   });
 }
 
