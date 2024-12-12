@@ -18,7 +18,7 @@
 - **Hide YouTube Shorts**: Remove YouTube Shorts from your home feed for a cleaner browsing experience.
 - **Privacy-Focused**: Operates locally in your browser without collecting or transmitting any user data.
   - **Firefox**: Supported on Manifest V2.
-  - **Chrome**: Will support Manifest V3 upon release.
+  - **Chrome**: Supports Manifest V3.
 
 ## Installation
 
@@ -27,6 +27,7 @@
 Detoxify is currently available for Firefox browsers.
 
 [**Download Detoxify for Firefox**](https://addons.mozilla.org/en-US/firefox/addon/detoxify-youtube/)
+[**Download Detoxify for Chromium Browser**](https://chromewebstore.google.com/detail/detoxify/fpkgobnjbinhnnhbbjagohcohhlbghig)
 
 ### Chrome
 
@@ -34,13 +35,13 @@ Detoxify will soon be available for Chrome and other Chromium-based browsers. St
 
 ## Usage
 
-1. Install the Detoxify extension from the [Firefox Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/detoxify-youtube/).
+1. Install the Detoxify extension from the [Firefox Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/detoxify-youtube/) and [Chome webstore](https://chromewebstore.google.com/detail/detoxify/fpkgobnjbinhnnhbbjagohcohhlbghig)
 2. Navigate to YouTube in your browser.
 3. You can toggle the "Hide Shorts" option in the extension.
 
 ## Screenshots
 
-| Extension on Firefox | Extension on Chrome (Unreleased) |
+| Extension on Firefox | Extension on Chrome |
 |-----------------------|----------------------------------|
 | ![Detoxify Extension for Firefox](https://github.com/user-attachments/assets/cde013b3-56ed-4b0e-b372-aebb01afb063) | ![Detoxify Extension for Chrome](https://github.com/user-attachments/assets/f4b53347-7fc0-4b1b-9350-214793f8ffb7) |
 
@@ -56,13 +57,12 @@ Detoxify will soon be available for Chrome and other Chromium-based browsers. St
 
 As Detoxify is in the testing phase, you may encounter some bugs:
 
-- **Shorts May Reappear**: YouTube Shorts may reappear after being hidden.
-- **Toggle Inconsistencies**: Toggling the "Hide Shorts" option may not consistently display Shorts correctly.
+- **Shorts May Reappear**: YouTube Shorts may reappear after being hidden. **(FIXED)**
+- **Toggle Inconsistencies**: Toggling the "Hide Shorts" option may not consistently display Shorts correctly. **(FIXED)**
 
 ### Troubleshooting
 
-- If Shorts reappear, try toggling the "Hide Shorts" option on and off several times to refresh the visibility settings.
-- If the issue persists, please [open an issue](#support) to report the problem.
+- please [open an issue](#support) to report the problem.
 
 ### Developer Note
 
@@ -72,11 +72,18 @@ Due to differences in extension APIs and event-handling mechanisms between Firef
 
 We are planning the following improvements:
 
-- [ ] **Bug Fixes**: Resolve the issue preventing Shorts from reappearing correctly after toggling.
-- [ ] **Extended Functionality**: Extend Shorts-hiding functionality to YouTube search results and other areas.
+- [x] ~**Bug Fixes**: Resolve the issue preventing Shorts from reappearing correctly after toggling.~
+- [x] ~**Extended Functionality**: Extend Shorts-hiding functionality to YouTube search results and other areas.~
 - [ ] **Filter Options**: Add options to filter feed videos based on selected tags.
-- [ ] **UI/UX Enhancements**: Improve the user interface for a more intuitive experience.
+- [x] ~**UI/UX Enhancements**: Improve the user interface for a more intuitive experience.~
 - [ ] **Hide Playables**: Introduce an option to hide playable ads (for YouTube Premium users).
+
+## Currently Working
+
+- [ ] **Hide Playables**: Introduce an option to hide playable ads (for YouTube Premium users).
+- [ ] **YT Shorts**: Currently working on hiding the yt shorts logo from the sidebar
+- [ ] **YT Music**: Not a major but working on shortening the name "YouTube Music" to "Music" only when sidebar is closed
+- [ ] **Content Filtering**: Can able to select what you want to view on your home feed.
 
 These enhancements aim to provide greater control over your YouTube experience, focusing on a customizable, ad-free, and distraction-free interface.
 
