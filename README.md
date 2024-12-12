@@ -54,12 +54,12 @@
 
 As Detoxify is in the testing phase, you may encounter some bugs:
 
-- **Shorts May Reappear**: YouTube Shorts may reappear after being hidden. **(FIXED)**
-- **Toggle Inconsistencies**: Toggling the "Hide Shorts" option may not consistently display Shorts correctly. **(FIXED)**
+- ~**Shorts May Reappear**: YouTube Shorts may reappear after being hidden.~ **(FIXED)**
+- ~**Toggle Inconsistencies**: Toggling the "Hide Shorts" option may not consistently display Shorts correctly.~ **(FIXED)**
 
 ### Troubleshooting
 
-- please [open an issue](#support) to report the problem.
+- Please [open an issue](#support) to report the problem.
 
 ### Developer Note
 
