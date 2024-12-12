@@ -24,15 +24,11 @@
 
 ### Firefox
 
-Detoxify is currently available for Firefox browsers.
-
 [**Download Detoxify for Firefox**](https://addons.mozilla.org/en-US/firefox/addon/detoxify-youtube/)
-
-[**Download Detoxify for Chromium Browser**](https://chromewebstore.google.com/detail/detoxify/fpkgobnjbinhnnhbbjagohcohhlbghig)
 
 ### Chrome
 
-Detoxify will soon be available for Chrome and other Chromium-based browsers. Stay tuned for updates.
+[**Download Detoxify for Chromium Browser**](https://chromewebstore.google.com/detail/detoxify/fpkgobnjbinhnnhbbjagohcohhlbghig)
 
 ## Usage
 
