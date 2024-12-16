@@ -4,6 +4,7 @@ const SELECTORS = {
   SEARCH_SHORTS: "ytd-reel-shelf-renderer",
   SHORTS_TITLE: "#title-text",
   SHORTS_TEXT: "Shorts",
+  SHORTS_ICON: "ytd-mini-guide-entry-renderer[aria-label='Shorts']",
 };
 
 const THROTTLE_DELAY = 500;
@@ -20,6 +21,16 @@ function hideHomePageShorts(hidden) {
       section.setAttribute("style", hidden ? "display: none !important" : "");
     }
   });
+}
+
+function killShortsIcon(hidden) {
+  const shortsElement = document.querySelector(SELECTORS.SHORTS_ICON);
+  if (shortsElement) {
+    shortsElement.setAttribute(
+      "style",
+      hidden ? "display: none !important" : ""
+    );
+  }
 }
 
 function hideSearchPageShorts(hidden) {
@@ -42,6 +53,7 @@ function initializeShortsVisibility() {
     const hidden = Boolean(data.hideShorts);
     hideHomePageShorts(hidden);
     hideSearchPageShorts(hidden);
+    killShortsIcon(hidden);
   });
 }
 
@@ -102,6 +114,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       const hidden = Boolean(data.hideShorts);
       hideHomePageShorts(hidden);
       hideSearchPageShorts(hidden);
+      killShortsIcon(hidden);
       sendResponse({ success: true });
     });
     return true; // Indicates async response
@@ -132,9 +145,14 @@ function initializeExtension() {
     SELECTORS.SEARCH_SHORTS,
     hideSearchPageShorts
   );
+  const shortsIconObserver = createObserver(
+    SELECTORS.SHORTS_ICON,
+    killShortsIcon
+  );
 
   homeObserver.observe(document.body, { childList: true, subtree: true });
   searchObserver.observe(document.body, { childList: true, subtree: true });
+  shortsIconObserver.observe(document.body, { childList: true, subtree: true });
 }
 
 initialize();
