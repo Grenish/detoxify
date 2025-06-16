@@ -1,14 +1,19 @@
-// Constants for selectors and configuration
-const SELECTORS = {
-  HOME_SHORTS: "ytd-rich-section-renderer",
-  SEARCH_SHORTS: "ytd-reel-shelf-renderer",
-  SHORTS_TITLE: "#title-text",
-  SHORTS_TEXT: "Shorts",
-  SHORTS_ICON: "ytd-mini-guide-entry-renderer[aria-label='Shorts']",
-};
+// Import shared utilities
+// Note: In production, you'd use import statements
+// but for extension compatibility, assume these are loaded via manifest
 
-const THROTTLE_DELAY = 500;
+/**
+ * Detoxify YouTube Content Script
+ * Hides Shorts from YouTube interface
+ */
 
+// Use browserAPI for cross-browser compatibility
+const browserAPI = typeof browser !== "undefined" ? browser : chrome;
+
+/**
+ * Hides Shorts sections on the homepage
+ * @param {boolean} hidden - Whether to hide Shorts
+ */
 function hideHomePageShorts(hidden) {
   const shortsSections = document.querySelectorAll(SELECTORS.HOME_SHORTS);
   shortsSections.forEach((section) => {
@@ -17,111 +22,218 @@ function hideHomePageShorts(hidden) {
       titleElement &&
       titleElement.innerText.trim() === SELECTORS.SHORTS_TEXT
     ) {
-      // Use important flag in CSS and handle inline styles properly
-      section.setAttribute("style", hidden ? "display: none !important" : "");
+      setImportantStyle(section, hidden);
     }
   });
 }
 
-function killShortsIcon(hidden) {
-  const shortsElement = document.querySelector(SELECTORS.SHORTS_ICON);
-  if (shortsElement) {
-    shortsElement.setAttribute(
-      "style",
-      hidden ? "display: none !important" : ""
-    );
-  }
-}
-
+/**
+ * Hides Shorts in search results
+ * @param {boolean} hidden - Whether to hide Shorts
+ */
 function hideSearchPageShorts(hidden) {
   const searchShortsElements = document.querySelectorAll(
     SELECTORS.SEARCH_SHORTS
   );
   searchShortsElements.forEach((element) => {
-    // Use important flag in CSS and handle inline styles properly
-    element.setAttribute("style", hidden ? "display: none !important" : "");
+    setImportantStyle(element, hidden);
   });
 }
 
-function initializeShortsVisibility() {
-  // Add error handling for storage access
-  chrome.storage.sync.get("hideShorts", (data) => {
-    if (chrome.runtime.lastError) {
-      console.error("Storage error:", chrome.runtime.lastError);
+/**
+ * Hides Shorts from sidebar navigation
+ * @param {boolean} hidden - Whether to hide Shorts
+ */
+function hideSidebarShorts(hidden) {
+  // Hide mini guide shorts icon
+  const shortsElement = document.querySelector(SELECTORS.SIDEBAR_SHORTS);
+  setImportantStyle(shortsElement, hidden);
+  
+  // Hide main guide shorts items
+  document.querySelectorAll(SELECTORS.GUIDE_SECTIONS).forEach(section => {
+    section.querySelectorAll(SELECTORS.GUIDE_ENTRIES).forEach(entry => {
+      const title = entry.querySelector('yt-formatted-string');
+      if (title && title.textContent.trim() === SELECTORS.SHORTS_TEXT) {
+        setImportantStyle(entry, hidden);
+      }
+    });
+  });
+}
+
+/**
+ * Checks if a video should be filtered based on tags
+ * @param {HTMLElement} videoElement - Video element to check
+ * @param {Array<string>} filterTags - Tags to filter by
+ * @returns {boolean} - Whether the video should be filtered
+ */
+function shouldFilterVideo(videoElement, filterTags) {
+  if (!videoElement || !filterTags || filterTags.length === 0) return false;
+  
+  try {
+    // More comprehensive selector to find video titles
+    const titleElement = videoElement.querySelector('#video-title, .title.ytd-video-renderer, .title');
+    if (!titleElement || !titleElement.textContent) return false;
+    
+    const videoTitle = titleElement.textContent.toLowerCase().trim();
+    console.debug(`Detoxify: Checking "${videoTitle.substring(0, 30)}..." against ${filterTags.length} tags`);
+    
+    return filterTags.some(tag => {
+      const trimmedTag = tag.toLowerCase().trim();
+      return trimmedTag && videoTitle.includes(trimmedTag);
+    });
+  } catch (error) {
+    logError("shouldFilterVideo", error);
+    return false;
+  }
+}
+
+/**
+ * Filter videos based on user-defined tags
+ */
+function filterVideos(filterTags, enabled) {
+  try {
+    // Expanded list of selectors for all video types
+    const videoSelectors = [
+      'ytd-video-renderer',
+      'ytd-grid-video-renderer',
+      'ytd-compact-video-renderer',
+      'ytd-rich-item-renderer',
+      'ytd-compact-playlist-renderer'
+    ];
+    
+    if (!enabled) {
+      // If filtering is disabled, make sure all videos are visible
+      videoSelectors.forEach(selector => {
+        document.querySelectorAll(selector).forEach(video => {
+          setImportantStyle(video, false);
+        });
+      });
+      console.debug('Detoxify: Video filtering disabled, all videos visible');
       return;
     }
-    const hidden = Boolean(data.hideShorts);
+    
+    // If no filter tags, don't hide anything
+    if (!filterTags || filterTags.length === 0) {
+      console.debug('Detoxify: No filter tags defined, all videos visible');
+      return;
+    }
+    
+    let filteredCount = 0;
+    videoSelectors.forEach(selector => {
+      const videos = document.querySelectorAll(selector);
+      console.debug(`Detoxify: Found ${videos.length} videos with selector ${selector}`);
+      
+      videos.forEach(video => {
+        const shouldHide = shouldFilterVideo(video, filterTags);
+        if (shouldHide) filteredCount++;
+        setImportantStyle(video, shouldHide);
+      });
+    });
+    
+    console.debug(`Detoxify: Filtered ${filteredCount} videos based on ${filterTags.length} tags`);
+  } catch (error) {
+    logError("filterVideos", error);
+  }
+}
+
+/**
+ * Updates visibility of all Shorts elements
+ * @param {boolean} hidden - Whether to hide Shorts
+ */
+function updateAllShortsVisibility(hidden) {
+  try {
     hideHomePageShorts(hidden);
     hideSearchPageShorts(hidden);
-    killShortsIcon(hidden);
-  });
+    hideSidebarShorts(hidden);
+  } catch (error) {
+    logError("updateAllShortsVisibility", error);
+  }
 }
 
-// Improved throttle function with proper closure handling
-function createThrottledFunction(callback, delay) {
-  let timeoutId = null;
-  return function (...args) {
-    if (timeoutId === null) {
-      timeoutId = setTimeout(() => {
-        callback.apply(this, args);
-        timeoutId = null;
-      }, delay);
-    }
-  };
+/**
+ * Initializes Shorts visibility based on stored preference
+ */
+function initializeShortsVisibility() {
+  getStorageValue(CONFIG.STORAGE_KEY)
+    .then(storedValue => {
+      const hidden = Boolean(storedValue);
+      updateAllShortsVisibility(hidden);
+    })
+    .catch(error => logError("initializeShortsVisibility", error));
 }
 
-function createObserver(selector, hideFunction) {
+/**
+ * Initialize video filters based on stored preference
+ */
+function initializeVideoFilters() {
+  getStorageValue(CONFIG.FILTER_TAGS_KEY)
+    .then(filterTags => {
+      getStorageValue(CONFIG.FILTERS_ENABLED_KEY)
+        .then(filtersEnabled => {
+          filterVideos(filterTags || [], Boolean(filtersEnabled));
+        });
+    })
+    .catch(error => logError("initializeVideoFilters", error));
+}
+
+/**
+ * Creates a mutation observer for automatic updates
+ * @param {string} selector - CSS selector to watch for
+ * @param {Function} updateFunction - Function to call when elements match
+ * @returns {MutationObserver} Configured observer
+ */
+function createObserver(selector, updateFunction) {
   let observer = null;
 
   const throttledUpdate = createThrottledFunction((hidden) => {
     if (observer) observer.disconnect();
-    hideFunction(hidden);
+    updateFunction(hidden);
     if (observer) {
       observer.observe(document.body, { childList: true, subtree: true });
     }
-  }, THROTTLE_DELAY);
+  }, CONFIG.THROTTLE_DELAY);
 
-  observer = new MutationObserver((mutations) => {
-    const relevantChange = mutations.some((mutation) =>
-      Array.from(mutation.addedNodes).some(
-        (node) => node.nodeType === Node.ELEMENT_NODE && node.matches(selector)
-      )
-    );
-
-    if (relevantChange) {
-      chrome.storage.sync.get("hideShorts", (data) => {
-        if (chrome.runtime.lastError) {
-          console.error("Storage error:", chrome.runtime.lastError);
-          return;
-        }
-        throttledUpdate(Boolean(data.hideShorts));
-      });
-    }
+  observer = new MutationObserver(() => {
+    getStorageValue(CONFIG.STORAGE_KEY)
+      .then(storedValue => throttledUpdate(Boolean(storedValue)))
+      .catch(error => logError("observerUpdate", error));
   });
 
   return observer;
 }
 
 // Message handling with proper response
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "updateShortsVisibility") {
-    chrome.storage.sync.get("hideShorts", (data) => {
-      if (chrome.runtime.lastError) {
-        console.error("Storage error:", chrome.runtime.lastError);
-        sendResponse({ success: false, error: chrome.runtime.lastError });
-        return;
-      }
-      const hidden = Boolean(data.hideShorts);
-      hideHomePageShorts(hidden);
-      hideSearchPageShorts(hidden);
-      killShortsIcon(hidden);
+browserAPI.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === CONFIG.UPDATE_ACTION) {
+    getStorageValue(CONFIG.STORAGE_KEY)
+      .then(storedValue => {
+        const hidden = Boolean(storedValue);
+        updateAllShortsVisibility(hidden);
+        sendResponse({ success: true });
+      })
+      .catch(error => {
+        logError("messageHandler", error);
+        sendResponse({ success: false, error: error.message });
+      });
+    return true; // Indicates async response
+  }
+  
+  if (request.action === CONFIG.UPDATE_FILTERS_ACTION) {
+    try {
+      const { filterTags, filtersEnabled } = request;
+      filterVideos(filterTags, filtersEnabled);
       sendResponse({ success: true });
-    });
+    } catch (error) {
+      logError("updateFilters", error);
+      sendResponse({ success: false, error: error.message });
+    }
     return true; // Indicates async response
   }
 });
 
-// Initialize with proper error handling
+/**
+ * Main initialization function
+ */
 function initialize() {
   try {
     // Wait for DOM to be ready
@@ -131,28 +243,61 @@ function initialize() {
       initializeExtension();
     }
   } catch (error) {
-    console.error("Error during initialization:", error);
+    logError("initialize", error);
   }
 }
 
+/**
+ * Sets up observers and initial state
+ */
 function initializeExtension() {
   initializeShortsVisibility();
-  const homeObserver = createObserver(
-    SELECTORS.HOME_SHORTS,
-    hideHomePageShorts
-  );
-  const searchObserver = createObserver(
-    SELECTORS.SEARCH_SHORTS,
-    hideSearchPageShorts
-  );
-  const shortsIconObserver = createObserver(
-    SELECTORS.SHORTS_ICON,
-    killShortsIcon
-  );
-
-  homeObserver.observe(document.body, { childList: true, subtree: true });
-  searchObserver.observe(document.body, { childList: true, subtree: true });
-  shortsIconObserver.observe(document.body, { childList: true, subtree: true });
+  initializeVideoFilters();
+  
+  // Create one main observer that handles all updates
+  const mainObserver = new MutationObserver(() => {
+    getStorageValue(CONFIG.STORAGE_KEY)
+      .then(storedValue => {
+        const hidden = Boolean(storedValue);
+        updateAllShortsVisibility(hidden);
+        
+        getStorageValue(CONFIG.FILTER_TAGS_KEY)
+          .then(filterTags => {
+            getStorageValue(CONFIG.FILTERS_ENABLED_KEY)
+              .then(filtersEnabled => {
+                if (filtersEnabled && filterTags && filterTags.length > 0) {
+                  console.debug('Detoxify: Observer triggered, applying filters');
+                }
+                filterVideos(filterTags || [], Boolean(filtersEnabled));
+              });
+          });
+      })
+      .catch(error => logError("mainObserver", error));
+  });
+  
+  // Start observing with a more efficient configuration
+  mainObserver.observe(document.body, { 
+    childList: true, 
+    subtree: true,
+    attributes: false,
+    characterData: false
+  });
+  
+  // Periodic check for videos that might have been missed
+  setInterval(() => {
+    getStorageValue(CONFIG.FILTER_TAGS_KEY)
+      .then(filterTags => {
+        getStorageValue(CONFIG.FILTERS_ENABLED_KEY)
+          .then(filtersEnabled => {
+            if (filtersEnabled && filterTags && filterTags.length > 0) {
+              console.debug('Detoxify: Periodic check for videos');
+              filterVideos(filterTags || [], Boolean(filtersEnabled));
+            }
+          });
+      })
+      .catch(error => logError("periodicCheck", error));
+  }, 2500);
 }
 
+// Start the extension
 initialize();
