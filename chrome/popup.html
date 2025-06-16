@@ -3,118 +3,318 @@
   <head>
     <meta charset="UTF-8" />
     <title>Detoxify YouTube</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-      /* Overall layout and font */
+      /* Core Variables */
+      :root {
+        --youtube-red: #ff0000;
+        --youtube-dark: #282828;
+        --text: #030303;
+        --bg: #ffffff;
+        --off-white: #f9f9f9;
+        --gray-light: #e5e5e5;
+        --gray: #909090;
+        --border-radius: 8px;
+        --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        --transition: 0.2s ease-out;
+      }
+
+      /* Reset & Base */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-        width: 260px;
-        background-color: #f9f9f9;
-        color: #333;
+        width: 300px;
+        font-family: 'Roboto', -apple-system, system-ui, sans-serif;
+        color: var(--text);
+        background: var(--bg);
+        padding: 0;
+        overflow-x: hidden;
       }
 
-      /* Title styling */
-      h1 {
-        font-size: 20px;
-        margin-bottom: 15px;
-        text-align: center;
-        color: #ff5722;
+      /* Header - YouTube Style */
+      .header {
+        background: var(--youtube-dark);
+        color: white;
+        padding: 16px;
+        position: relative;
+        overflow: hidden;
       }
 
-      /* Button styling */
+      .logo-area {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .logo {
+        color: var(--youtube-red);
+        font-size: 24px;
+        animation: pulse 2s infinite alternate;
+      }
+
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.05); }
+      }
+
+      .title {
+        font-weight: 500;
+        font-size: 18px;
+        letter-spacing: 0.3px;
+      }
+
+      .subtitle {
+        font-size: 12px;
+        color: var(--gray);
+        margin-top: 2px;
+      }
+
+      /* Stylized shorts icon in header background */
+      .header::after {
+        content: "";
+        position: absolute;
+        right: -15px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 50%;
+        z-index: 1;
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 40px;
+        background: rgba(255, 0, 0, 0.2);
+        border-radius: 8px;
+        z-index: 1;
+      }
+
+      /* Main content */
+      .content {
+        padding: 16px;
+      }
+
+      /* Toggle switch container */
+      .main-feature {
+        background: var(--off-white);
+        border-radius: var(--border-radius);
+        padding: 16px;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 16px;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+      }
+
+      .main-feature:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      /* YouTube Shorts toggle section */
+      .feature-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .feature-title {
+        font-weight: 500;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .feature-icon {
+        color: var(--youtube-red);
+        font-size: 16px;
+      }
+
+      /* Button styling - restored for functionality but styled */
       .toggle-button {
         width: 100%;
-        padding: 12px;
-        background-color: #ff5722;
-        color: #ffffff;
+        padding: 12px 16px;
+        background: var(--youtube-red);
+        color: var(--bg);
         border: none;
-        font-size: 16px;
-        font-weight: bold;
+        font-size: 15px;
+        font-weight: 600;
         cursor: pointer;
-        border-radius: 4px;
-        transition: background-color 0.3s ease;
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+        box-shadow: 0 4px 8px rgba(255, 0, 0, 0.2);
+        outline: none;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .toggle-button i {
+        font-size: 16px;
+      }
+      
+      .toggle-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: all 0.8s ease;
       }
 
       .toggle-button:hover {
-        background-color: #e64a19;
+        background: #e50000;
+        box-shadow: 0 6px 12px rgba(255, 0, 0, 0.25);
+        transform: translateY(-2px);
+      }
+      
+      .toggle-button:hover::before {
+        left: 100%;
+      }
+      
+      .toggle-button:active {
+        transform: translateY(0);
       }
 
-      /* Message styling */
+      /* Message styling - restored for functionality but styled */
       .message {
-        font-size: 13px;
-        color: #4caf50;
+        font-size: 14px;
+        color: #4CAF50;
         text-align: center;
-        margin-top: 10px;
+        margin-top: 12px;
+        font-weight: 500;
+        padding: 0;
+        border-radius: var(--border-radius);
+        background-color: rgba(76, 175, 80, 0.1);
+        max-height: 0;
+        overflow: hidden;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+      
+      .message:not(:empty) {
+        max-height: 50px;
+        padding: 8px 12px;
+        margin-top: 12px;
       }
 
-      /* Notice text styling */
-      .notice {
+      /* Remove the unnecessary elements */
+      .switch, .slider, .shorts-visual, .shorts-blocker, .status {
+        display: none;
+      }
+
+      /* Footer section */
+      .footer {
+        padding: 0 16px 16px;
         font-size: 12px;
-        color: #777;
-        text-align: center;
-        margin-top: 15px;
       }
 
-      /* Link and support styling */
-      .link-container,
-      .support-container {
-        text-align: center;
-        font-size: 13px;
-        margin-top: 20px;
-        color: #888;
-      }
-
-      .link-container a,
-      .support-container a {
-        color: #ff5722;
-        text-decoration: none;
-      }
-
-      .link-container a:hover,
-      .support-container a:hover {
-        text-decoration: underline;
-      }
-
-      /* Support links in a row */
-      .support-links {
+      .links {
         display: flex;
         justify-content: space-between;
-        margin-top: 5px;
+        margin-bottom: 12px;
+      }
+
+      .link {
+        color: var(--youtube-dark);
+        text-decoration: none;
+        opacity: 0.7;
+        transition: var(--transition);
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .link:hover {
+        opacity: 1;
+        color: var(--youtube-red);
+      }
+
+      .divider {
+        height: 1px;
+        background: var(--gray-light);
+        margin: 10px 0;
+      }
+
+      .credits {
+        font-size: 11px;
+        color: var(--gray);
+        text-align: center;
+        margin-top: 10px;
       }
     </style>
   </head>
   <body>
-    <h1>Detoxify YouTube</h1>
-
-    <div class="option">
-      <button class="toggle-button" id="toggle-shorts-btn">
-        Toggle Hide Shorts
-      </button>
-    </div>
-
-    <div class="message" id="message"></div>
-
-    <div class="link-container">
-      <p>
-        Found a bug? Please
-        <a
-          href="https://github.com/Grenish/detoxify/issues/new/choose"
-          target="_blank"
-          >report it here</a
-        >
-      </p>
-    </div>
-
-    <div class="support-container">
-      <p>Support my work:</p>
-      <div class="support-links">
-        <a href="https://buymeacoffee.com/grenish" target="_blank"
-          >Buy Me a Coffee</a
-        >
-        <a href="https://grenishrai.icu" target="_blank">My Website</a>
+    <!-- YouTube-inspired header -->
+    <div class="header">
+      <div class="logo-area">
+        <div class="logo">
+          <i class="fab fa-youtube"></i>
+        </div>
+        <div>
+          <div class="title">Detoxify YouTube</div>
+          <div class="subtitle">Hide Shorts, enjoy better content</div>
+        </div>
       </div>
     </div>
 
+    <!-- Main content area - restored to original structure -->
+    <div class="content">
+      <div class="main-feature">
+        <!-- Restore original button for functionality -->
+        <div class="option">
+          <button class="toggle-button" id="toggle-shorts-btn">
+            <i class="fas fa-video-slash"></i>
+            Hide YouTube Shorts
+          </button>
+        </div>
+
+        <!-- Restore original message structure -->
+        <div class="message" id="message"></div>
+      </div>
+    </div>
+
+    <!-- Footer with links - maintained new style -->
+    <div class="footer">
+      <div class="links">
+        <a href="https://github.com/Grenish/detoxify/issues/new/choose" target="_blank" class="link">
+          <i class="fas fa-bug"></i> Report issue
+        </a>
+        <a href="https://buymeacoffee.com/grenish" target="_blank" class="link">
+          <i class="fas fa-coffee"></i> Support
+        </a>
+        <a href="https://grenishrai.icu" target="_blank" class="link">
+          <i class="fas fa-globe"></i> Website
+        </a>
+      </div>
+      <div class="divider"></div>
+      <div class="credits">Detoxify YouTube &copy; 2023</div>
+    </div>
+
+    <!-- Use original script file -->
     <script src="popup.js"></script>
   </body>
 </html>
