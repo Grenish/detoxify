@@ -1,15 +1,26 @@
 # Detoxify
 
-Detoxify is a Chrome extension designed to remove YouTube Shorts from your feed and search results, providing a streamlined, distraction-free experience. Compatible with all Chromium-based browsers, Detoxify ensures a clean and focused YouTube interface.
+Detoxify is a browser extension designed to customize your YouTube experience by removing distracting elements like YouTube Shorts from your feed, search results, and sidebar. Compatible with both Chrome and Firefox browsers, Detoxify ensures a clean and focused YouTube interface.
 
-Detoxify is currently in the testing phase and requires further improvements. At present, it can hide Shorts from the YouTube feed and search results, though they may reappear after some time. Additionally, once Shorts are hidden, toggling them back on does not always display them correctly.
+## Features
+
+- Hide Shorts from YouTube homepage feed
+- Hide Shorts from search results
+- Hide Shorts from sidebar navigation
+- Simple toggle button to show/hide Shorts as needed
+
+## Current Status
+
+Detoxify is continually improving with each release. The extension now effectively hides Shorts from all key areas of YouTube's interface and properly restores them when toggled back on.
 
 **Planned Improvements:**
 
-- [ ] Resolve bug preventing Shorts from reappearing after toggling.
-- [ ] Add option to filter feed videos based on selected tags.
-- [ ] Enhance UI/UX for a more intuitive experience.
-- [ ] Introduce an option to hide playables (for YouTube Premium users).
-- [ ] Attempt to hide ads on the homepage (fingers crossed!).
+- [x] Hide Shorts from sidebar navigation
+- [ ] Add option to filter feed videos based on selected tags
+- [x] Enhance UI/UX for a more intuitive experience
+- [ ] Introduce an option to hide playables
+- [ ] Attempt to hide ads on the homepage (fingers crossed!)
 
-These enhancements aim to provide users with greater control over their YouTube experience, focusing on a clean and customizable interface.
+## Development
+
+### Project Structure
