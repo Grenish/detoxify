@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "Detoxify",
+  "version": "2.0.0",
+  "description": "Detox your YouTube feed: hide Shorts, Playables, block keywords, and use focus presets.",
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Detoxify",
+    "default_icon": {
+      "16": "detoxify.png",
+      "32": "detoxify.png",
+      "48": "detoxify.png",
+      "128": "detoxify.png"
+    }
+  },
+  "icons": {
+    "16": "detoxify.png",
+    "32": "detoxify.png",
+    "48": "detoxify.png",
+    "128": "detoxify.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://www.youtube.com/*",
+        "*://m.youtube.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{5bd4b0f1-6eb4-4a34-a44e-2b79c9df7e2e}",
+      "strict_min_version": "109.0"
+    }
+  }
+}

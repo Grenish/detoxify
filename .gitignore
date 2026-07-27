@@ -1,2 +1,7 @@
+node_modules/
+dist/
 chrome.zip
 firefox.zip
+*.zip
+.DS_Store
+*.log
