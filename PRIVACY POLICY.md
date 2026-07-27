@@ -1,57 +1,69 @@
 # Privacy Policy
 
-This privacy policy applies to the use of the Detoxify browser extension, which provides tools for customizing your YouTube experience. This document explains what data we handle, how we handle it, and why. If you have any questions, please contact us at [mrcoder2033d@gmail.com](mailto:mrcoder2033d@gmail.com).
+This privacy policy applies to the **Detoxify** browser extension. If you have questions, contact [mrcoder2033d@gmail.com](mailto:mrcoder2033d@gmail.com).
 
-## What Our Extension Does
+## What the extension does
 
-The extension enhances your YouTube experience by providing the following features:
-- Hiding or showing YouTube Shorts.
-- Filtering videos based on specific tags.
-- Adjusting your YouTube feed for better control over the content you see.
+Detoxify customizes your YouTube experience in the browser by:
 
-## What Data We Collect
+- Hiding YouTube Shorts surfaces (feeds, shelves, navigation) when enabled
+- Optionally redirecting Shorts player URLs (`/shorts/*`) to the YouTube home page
+- Hiding Playables / Games promo shelves when enabled
+- Hiding home-feed cards that match a user-defined keyword blocklist
+- Optionally shortening the “YouTube Music” guide label
+- Saving named presets of these preferences
 
-We do **not** collect, store, or transmit any personal or sensitive user data. All the features in the extension are processed **locally** in your browser. This means:
-- We do not track your activity.
-- We do not collect any data about the videos you watch, tags you filter, or the preferences you set.
-- No information is sent to external servers.
+All of this runs **locally in your browser**.
 
-## Permissions We Require
+## What data we collect
 
-To provide the above features, the extension requires the following browser permissions:
+We do **not** collect, store on our servers, or transmit personal or sensitive user data.
 
-### Access to YouTube Pages
-- The extension modifies the YouTube webpage to hide or show Shorts, filter tags, and customize the feed.
-- These changes happen entirely in your browser and do not involve any communication with external servers.
+- We do not track browsing or watch history.
+- We do not send video titles, channels, keywords, or preferences to external servers.
+- We do not use analytics, ads, or third-party APIs.
 
-### Storage
-- The storage permission is used to save your preferences, such as whether Shorts are hidden or which tags to filter.
-- All data is stored locally in your browser's storage and does not leave your device.
+## What is stored on your device
 
-## How Your Data Is Used
+Using the browser **storage** permission, Detoxify saves preferences such as:
 
-Since we do not collect or transmit any data, there is no data usage to disclose. All operations, including the customization of your YouTube experience, are handled locally within your browser.
+- Feature toggles (hide Shorts, hide Playables, etc.)
+- Keyword blocklist entries you add
+- Built-in preset selection and any custom presets you create
 
-## Third-Party Services
+Data is kept in the browser’s extension storage (`storage.sync` when available so settings can follow your browser account, still under your browser vendor’s control — not Detoxify servers).
 
-Our extension does **not** use any third-party services or APIs to fetch or process data. All functionality is self-contained and operates entirely within your browser environment.
+## Permissions
 
-## Security of Your Data
+| Permission / access | Why |
+|---------------------|-----|
+| `storage` | Save and read your Detoxify settings and presets |
+| YouTube page access (content scripts) | Hide elements and apply preferences on `youtube.com` / `m.youtube.com` |
 
-Because no data is collected or transmitted, there is no risk of data breaches or unauthorized access from our extension. Your settings and preferences remain private and secure on your device.
+No other host permissions are requested.
 
-## Changes to This Privacy Policy
+## Third-party services
 
-If we make any updates to this privacy policy, we will update this page and notify users as needed. Changes may include adjustments to permissions, features, or explanations of how the extension works.
+Detoxify does **not** integrate third-party services for core functionality. Links in the popup (GitHub, support, website) open only if you click them.
 
-## Contact Us
+## Security
 
-If you have any questions, concerns, or feedback regarding this privacy policy, please contact us at:
+Because no data is sent to Detoxify-operated servers, there is no Detoxify backend that can leak your settings. Protect your device and browser account as usual.
 
-- **Email**: [mrcoder2033d@gmail.com](mailto:mrcoder2033d@gmail.com)
-- **GitHub Issues**: [Link to your GitHub repo issues](https://github.com/Grenish/detoxify/issues/new/choose)
+## Children
+
+The extension is a general-purpose YouTube UI tool. It does not knowingly collect data from anyone, including children.
+
+## Changes
+
+If this policy changes, we will update this document and the **Last updated** date below.
+
+## Contact
+
+- **Email:** [mrcoder2033d@gmail.com](mailto:mrcoder2033d@gmail.com)
+- **GitHub Issues:** [https://github.com/Grenish/detoxify/issues](https://github.com/Grenish/detoxify/issues)
 
 ---
 
-**Effective Date:** November 19, 2024  
-**Last Updated:** November 19, 2024
+**Effective date:** November 19, 2024  
+**Last updated:** July 27, 2026

@@ -1,71 +1,55 @@
 # Contributing to Detoxify
 
-Thank you for considering contributing to Detoxify! Your support helps improve this Chrome extension, making it a more effective tool for a distraction-free YouTube experience. Below are the guidelines for contributing to this project.
+Thanks for helping make YouTube a little quieter.
 
-## Getting Started
+## Prerequisites
 
-### Prerequisites
+- [Bun](https://bun.sh)
+- A Chromium browser and/or Firefox for testing
 
-1. **Chromium Browser**: Ensure you have a Chromium-based browser (e.g., Google Chrome, Microsoft Edge) installed for testing.
-2. **Node.js and npm** (optional): For any additional tooling or package management, though not currently required.
+## Setup
 
-### Setting Up the Project
+```bash
+git clone https://github.com/Grenish/detoxify.git
+cd detoxify
+bun install
+bun run build
+```
 
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/Grenish/detoxify.git
-   cd detoxify
-   ```
+Load **`dist/chrome`** or **`dist/firefox`** as an unpacked / temporary extension (see README).
 
-2. **Load the Extension**:
-   - Open your Chromium-based browser.
-   - Navigate to `chrome://extensions/`.
-   - Enable **Developer mode**.
-   - Click **Load unpacked** and select the `detoxify` directory.
+## Project structure
 
-3. **Explore the Codebase**:
-   - The project structure includes:
-     - `background.js`: Handles background scripts.
-     - `content.js`: Manages content-specific scripts.
-     - `manifest.json`: Defines extension settings and permissions.
-     - `popup.html` and `popup.js`: Control the popup's UI and functionality.
+| Path | Role |
+|------|------|
+| `src/shared/` | Settings, presets, selectors, CSS injection helpers |
+| `src/content/` | Content script and feature modules (Shorts, Playables, keywords, …) |
+| `src/popup/` | Popup HTML / CSS / JS |
+| `src/background/` | Thin MV3 background |
+| `browsers/` | Browser-specific `manifest.json` files |
+| `scripts/build.mjs` | esbuild packaging into `dist/` |
 
-## How to Contribute
+Prefer fixing YouTube DOM breakage in **`src/shared/selectors.js`** and **`src/shared/css.js`** rather than scattering selectors.
 
-Since this is a new repository, the issue tracker may not have any issues yet. Here are some ways you can start contributing:
+## Workflow
 
-1. **Identifying Bugs and Limitations**: While using Detoxify, if you encounter any bugs or limitations, please open an issue describing the problem clearly.
+1. Create a branch: `git checkout -b feature/your-change`
+2. Make changes under `src/` (or manifests under `browsers/`)
+3. Run `bun run build` and reload the extension
+4. Test on live YouTube: home, search, subscriptions, a `/shorts/` URL, popup toggles/presets
+5. Open a pull request with a clear description
 
-2. **Suggesting Features**: If you have ideas for enhancements, feel free to open an issue. Describe your suggestion in detail, and explain why it would improve the user experience.
+## Ideas that help
 
-3. **Implementing Improvements**:
-   - You can start working on the planned improvements listed in the `TODO` section below or suggest your own enhancements.
-   - Comment on the planned improvements you'd like to work on, if applicable, to avoid duplication.
-
-4. **Submitting Changes**:
-   - Fork the repository and create a new branch for your changes:
-     ```bash
-     git checkout -b feature/your-feature-name
-     ```
-   - Make your changes and commit them with clear messages:
-     ```bash
-     git commit -m "Description of changes"
-     ```
-   - Push your branch to your fork and create a Pull Request to the main repository:
-     ```bash
-     git push origin feature/your-feature-name
-     ```
-   - In your pull request, include a description of your changes and the motivation behind them.
+- More resilient Shorts / Playables selectors when YouTube redesigns
+- Performance improvements to the mutation observer
+- Accessibility and popup UX polish
+- Automated unit tests for pure helpers (keyword match, preset merge, normalizeSettings)
 
 ## Code of Conduct
 
-Please follow our [Code of Conduct](CODE_OF_CONDUCT.md) to maintain a welcoming environment for all contributors.
+Please follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
-## TODO List
+## License
 
-Areas where contributions are currently needed:
-- **Bug Fixes**: Address the issue of toggling Shorts visibility.
-- **New Features**: Add filtering of feed videos by tags, improve UI/UX, hide playables for YouTube Premium users, and attempt to block ads on the homepage.
-- **Documentation**: Enhance the documentation with more details and usage examples.
-
-Thank you for contributing to Detoxify! Your efforts help make this extension better for everyone.
+By contributing, you agree that your contributions will be licensed under the MIT License.
