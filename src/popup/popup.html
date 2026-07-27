@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Detoxify</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <!-- MAIN -->
+    <div class="view" id="view-main">
+      <header class="header">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">DTX</span>
+          <div class="brand-text">
+            <h1>DETOXIFY</h1>
+            <p class="subtitle">// CUT THE NOISE</p>
+          </div>
+        </div>
+        <div class="header-end">
+          <button
+            type="button"
+            class="power"
+            id="power-btn"
+            title="Turn all detox features off"
+            aria-label="Turn all features off"
+          >
+            OFF
+          </button>
+          <button
+            type="button"
+            class="nav-btn"
+            id="open-settings"
+            title="Settings"
+            aria-label="Open settings"
+          >
+            ⚙
+          </button>
+          <span
+            class="status-pill"
+            id="status-pill"
+            data-mode="off"
+            aria-live="polite"
+          >
+            <span class="status-label" id="status-label">OFF</span>
+          </span>
+        </div>
+      </header>
+
+      <p class="flash" id="flash" hidden role="status"></p>
+
+      <section class="panel" aria-labelledby="presets-label">
+        <div class="panel-head">
+          <h2 id="presets-label"><span class="idx">01</span> PRESETS</h2>
+          <button type="button" class="text-btn" id="save-preset-btn">
+            + SAVE
+          </button>
+        </div>
+        <div class="preset-grid" id="preset-row" role="list"></div>
+        <div class="custom-presets" id="custom-presets" hidden></div>
+      </section>
+
+      <section class="panel panel-last" aria-labelledby="controls-label">
+        <div class="panel-head">
+          <h2 id="controls-label"><span class="idx">02</span> CONTROLS</h2>
+        </div>
+
+        <div class="group-card">
+          <label class="toggle-row">
+            <div class="toggle-copy">
+              <span class="toggle-title">HIDE SHORTS</span>
+              <span class="toggle-desc">Shelves · cards · search</span>
+            </div>
+            <input type="checkbox" id="hideShorts" data-key="hideShorts" />
+            <span class="switch" aria-hidden="true"></span>
+          </label>
+          <div class="nested-stack" id="shorts-nested">
+            <label class="toggle-row nested" id="row-redirectShorts">
+              <div class="toggle-copy">
+                <span class="toggle-title">BLOCK PLAYER</span>
+                <span class="toggle-desc">/shorts → Home</span>
+              </div>
+              <input
+                type="checkbox"
+                id="redirectShorts"
+                data-key="redirectShorts"
+              />
+              <span class="switch" aria-hidden="true"></span>
+            </label>
+            <label class="toggle-row nested" id="row-hideShortsSidebar">
+              <div class="toggle-copy">
+                <span class="toggle-title">KILL SIDEBAR</span>
+                <span class="toggle-desc">Guide + tabs</span>
+              </div>
+              <input
+                type="checkbox"
+                id="hideShortsSidebar"
+                data-key="hideShortsSidebar"
+              />
+              <span class="switch" aria-hidden="true"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="group-card">
+          <label class="toggle-row">
+            <div class="toggle-copy">
+              <span class="toggle-title">HIDE PLAYABLES</span>
+              <span class="toggle-desc">Games · promos</span>
+            </div>
+            <input type="checkbox" id="hidePlayables" data-key="hidePlayables" />
+            <span class="switch" aria-hidden="true"></span>
+          </label>
+        </div>
+
+        <div class="group-card" id="keywords-card">
+          <label class="toggle-row">
+            <div class="toggle-copy">
+              <span class="toggle-title">KEYWORD BLOCK</span>
+              <span class="toggle-desc">Title / channel match</span>
+            </div>
+            <input
+              type="checkbox"
+              id="blockKeywords"
+              data-key="blockKeywords"
+            />
+            <span class="switch" aria-hidden="true"></span>
+          </label>
+          <div class="keywords-drawer" id="keywords-section">
+            <div class="drawer-meta">
+              <span class="drawer-label">LIST</span>
+              <span class="hint" id="keyword-count">0 / 50</span>
+            </div>
+            <form class="keyword-form" id="keyword-form">
+              <input
+                type="text"
+                id="keyword-input"
+                placeholder="ADD WORD…"
+                maxlength="80"
+                autocomplete="off"
+              />
+              <button type="submit" class="btn primary">ADD</button>
+            </form>
+            <ul class="keyword-list" id="keyword-list"></ul>
+          </div>
+        </div>
+
+        <div class="group-card group-card-last">
+          <label class="toggle-row">
+            <div class="toggle-copy">
+              <span class="toggle-title">MUSIC LABEL</span>
+              <span class="toggle-desc">YouTube Music → Music</span>
+            </div>
+            <input
+              type="checkbox"
+              id="shortenMusicLabel"
+              data-key="shortenMusicLabel"
+            />
+            <span class="switch" aria-hidden="true"></span>
+          </label>
+        </div>
+      </section>
+    </div>
+
+    <!-- SETTINGS (compact single panel — fits popup height) -->
+    <div class="view view-settings" id="view-settings" hidden>
+      <header class="header">
+        <div class="brand">
+          <button
+            type="button"
+            class="brand-mark brand-back"
+            id="back-main"
+            title="Back"
+            aria-label="Back to main"
+          >
+            ←
+          </button>
+          <div class="brand-text">
+            <h1>SETTINGS</h1>
+            <p class="subtitle">// OPTIONS</p>
+          </div>
+        </div>
+        <div class="header-end">
+          <span class="status-pill status-static" data-mode="custom">
+            <span class="status-label">CFG</span>
+          </span>
+        </div>
+      </header>
+
+      <p class="flash" id="flash-settings" hidden role="status"></p>
+
+      <section class="panel panel-settings panel-last">
+        <div class="settings-row">
+          <span class="toggle-title">THEME</span>
+          <div class="segment" role="group" aria-label="Theme">
+            <button
+              type="button"
+              class="segment-btn"
+              data-theme-value="light"
+              id="theme-light"
+            >
+              LIGHT
+            </button>
+            <button
+              type="button"
+              class="segment-btn"
+              data-theme-value="dark"
+              id="theme-dark"
+            >
+              DARK
+            </button>
+          </div>
+        </div>
+
+        <div class="group-card link-stack settings-block">
+          <a
+            class="link-row compact"
+            id="rate-link"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="toggle-title">RATE DETOXIFY</span>
+            <span class="link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a
+            class="link-row compact"
+            href="https://github.com/Grenish/detoxify/issues/new/choose"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="toggle-title">REPORT BUG</span>
+            <span class="link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a
+            class="link-row compact"
+            href="https://buymeacoffee.com/grenish"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="toggle-title">SUPPORT</span>
+            <span class="link-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a
+            class="link-row compact"
+            href="https://grenishrai.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="toggle-title">WEBSITE</span>
+            <span class="link-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+
+        <div class="group-card link-stack settings-block">
+          <button type="button" class="link-row compact as-button" id="reset-features">
+            <span class="toggle-title">RESET FEATURES</span>
+            <span class="link-arrow" aria-hidden="true">↺</span>
+          </button>
+          <button
+            type="button"
+            class="link-row compact as-button danger-row"
+            id="reset-all"
+          >
+            <span class="toggle-title">WIPE ALL DATA</span>
+            <span class="link-arrow" aria-hidden="true">×</span>
+          </button>
+        </div>
+
+        <p class="about-line" id="rate-desc">
+          DETOXIFY <span id="about-version">V2.0.0</span> · LOCAL · NO TRACKING
+        </p>
+      </section>
+    </div>
+
+    <dialog class="dialog" id="save-dialog">
+      <form method="dialog" id="save-form" class="dialog-inner">
+        <h3>SAVE PRESET</h3>
+        <p class="dialog-hint">Stores current toggles + keywords.</p>
+        <input
+          type="text"
+          id="preset-name-input"
+          placeholder="NAME"
+          maxlength="40"
+          required
+        />
+        <div class="dialog-actions">
+          <button type="button" class="btn ghost" id="save-cancel">
+            CANCEL
+          </button>
+          <button type="submit" class="btn primary">SAVE</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
